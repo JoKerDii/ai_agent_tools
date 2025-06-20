@@ -1,0 +1,108 @@
+job_research_task:
+  description: >
+    Search for current job openings for the position "{job_title}" at the companies: {companies_str}, located in the US.
+        
+        For each company, find job postings that match the job title. Look for:
+        1. Official company career pages
+        2. Major job boards (LinkedIn, Indeed, Glassdoor, etc.)
+        3. Current active job postings (posted within last 30 days)
+        
+        Collect the URLs of relevant job postings and provide a list with:
+        - Company name
+        - Job title (exact as posted)
+        - Job posting URL
+        - Platform where found
+        - Date posted (if available)
+        
+        Focus on finding at least 2-3 job postings per company if available.
+  expected_output: >
+    A structured list of job posting URLs with company information and metadata
+  agent: job_researcher
+
+job_extraction_task:
+  description: >
+    Extract detailed job information from the URLs provided by the Job Market Researcher.
+        
+        For each job posting URL, scrape and extract:
+        1. Complete job description
+        2. Required qualifications and education
+        3. Required technical skills
+        4. Preferred soft skills or personal qualities
+        5. Job responsibilities and duties
+        6. Information about the hiring team/department
+        7. Salary range or compensation information
+        8. Company information and culture details
+        
+        Handle different website structures and formats. If a URL is inaccessible, 
+        note it and continue with available URLs.
+        
+        Return the raw extracted content for each job posting.
+  expected_output: >
+    Raw job description content extracted from each URL with source information
+  agent: job_scraper
+  context:
+    - job_research_task
+
+job_analysis_task:
+  description: >
+    Analyze the extracted job descriptions and structure the information into standardized categories.
+        
+        For each job posting, extract and categorize:
+        
+        1. **Education Requirements**: Degree level, field of study, certifications
+        2. **Technical Skills**: Programming languages, tools, technologies, platforms
+        3. **Soft Skills**: Communication, leadership, teamwork, problem-solving abilities
+        4. **Role Responsibilities**: Main duties, projects, day-to-day activities
+        5. **Hiring Team Function**: Department, team structure, reporting relationships
+        6. **Salary Information**: Salary range, benefits, compensation structure
+        
+        Be thorough in extraction and categorization. If information is not explicitly stated, 
+        mark as "Not specified" rather than making assumptions.
+        
+        Structure each job analysis consistently for easy comparison.
+  expected_output: >
+    Structured job analysis data for each position with categorized requirements and information
+  agent: job_analyzer
+  context:
+    - job_research_task
+    - job_extraction_task
+
+job_summarization_task:
+  description: >
+    Create a comprehensive summary report for "{job_title}" positions based on the analyzed job data.
+        
+        Provide:
+        
+        1. **Individual Job Summaries**: For each job posting, create a detailed summary including:
+           - Company and position details
+           - Education requirements
+           - Technical skills required
+           - Soft skills desired
+           - Key responsibilities
+           - Hiring team information
+           - Salary details
+        
+        2. **Aggregated Insights**: Cross-job analysis including:
+           - Most common education requirements
+           - Most in-demand technical skills
+           - Most valued soft skills
+           - Common responsibilities across roles
+           - Salary range analysis
+           - Industry trends and patterns
+        
+        3. **Recommendations**: Based on the analysis, provide insights for:
+           - Job seekers preparing for these roles
+           - Skills to prioritize for career development
+           - Market competitiveness factors
+        
+        Format the output as a structured report that's easy to read and actionable.
+  expected_output: >
+    A comprehensive job market analysis report with individual summaries and aggregated insights
+  agent: job_summarizer
+  context:
+    - job_research_task
+    - job_extraction_task
+    - job_analysis_task
+  output_file: output/report.md
+
+

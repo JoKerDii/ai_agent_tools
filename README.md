@@ -1,23 +1,13 @@
 # Personal AI Agent Tools
 
-1. Debator
+1. Debator [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/debater/output/decide.md)
 
-    [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/debater/output/decide.md)
+2. Financial Researcher [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/financial_researcher/output/report.md)
 
-2. Financial Researcher 
+3. Stock Picker [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/stock_picker/output/decision.md)
 
-    [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/financial_researcher/output/report.md)
-
-3. Stock Picker
-
-    [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/stock_picker/output/decision.md)
-
-4. Coder
-
-5. Engineer Team 
-
-6. JD Summarizer 
-
-7. Market Tracker
-
-8. Blog, Paper, Podcast Updater
+4. Coder [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/coder/output/code_and_output.txt)
+5. JD Summarizer [Example Output](https://github.com/JoKerDii/ai_agent_tools/blob/main/jd_summarizer/output/report.md)
+6. Market Tracker
+7. Blog, Paper, Podcast Updater
+8. Reading Partner
