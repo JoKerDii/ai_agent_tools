@@ -1,0 +1,104 @@
+initial_research_question_analysis:
+  description: >
+    Given the research question "{research_question}", perform an initial analysis to identify 
+    any ambiguous terms, highly specialized jargon, or areas where current public knowledge 
+    might be crucial for full understanding. Prioritize clarity on the core subject and 
+    potential sub-topics. If necessary, use the search_tool to gather preliminary context or 
+    definitions for unclear terms.
+    The agent might identify that a term has multiple meanings in different contexts and 
+    use the search tool to determine the most relevant context for the given research question.
+  expected_output: >
+    A structured note (e.g., bullet points or short paragraphs) identifying potential ambiguities, 
+    key knowledge areas to verify, or terms requiring further definition.
+  agent: research_question_analyst
+
+contextualize_and_deconstruct_research_question:
+  description: >
+    Based on the initial analysis output and the original research question "{research_question}", 
+    perform targeted online searches using the search tool to gain deeper context, 
+    recent developments, or specific data points related to the identified key terms and 
+    potential ambiguities. Then, thoroughly deconstruct the research question into its 
+    core subject, specific objectives, precise scope, intended target audience for 
+    the research output, and any implicit constraints or desired angles. 
+    Synthesize information gathered from online sources to provide a rich, informed breakdown.
+  expected_output: >
+    A comprehensive, structured JSON or detailed markdown section containing:
+    - core_subject: (e.g., "Impact of AI on climate change")
+    - specific_objectives: (e.g., "Identify AI applications, quantify their environmental benefits, assess potential risks")
+    - scope: (e.g., "Global, focus on renewable energy and carbon capture, recent 5 years, validated by current research trends")
+    - target_audience_of_research_output: (e.g., "Policy makers, environmental scientists")
+    - key_terms: (e.g., ["AI", "climate change", "renewable energy", "carbon capture", "carbon footprint reduction technologies"])
+    - implicit_requirements: (e.g., "Quantitative data preferred, actionable insights, consider ethical implications as widely discussed online")
+    - contextual_notes_from_search: (Summarize key findings from online searches that inform the deconstruction, e.g., "Online discussions highlight growing concerns about AI's energy consumption, which should be considered in 'risks'.")
+  context:
+    - initial_research_question_analysis
+  agent: research_question_analyst
+  
+synthesize_initial_prompt:
+  description: >
+    Using the output from the Research Question Analyst 
+    and the provided prompt writing guidelines:
+     
+    {prompt_guidelines_document_content}
+
+    craft an initial, detailed AI Deep Research prompt. 
+    Ensure all relevant guidelines are explicitly addressed in the prompt's structure and content. 
+    The prompt should clearly define the AI's role, task, constraints, desired output format, 
+    and evaluation criteria.
+  expected_output: >
+    The complete, first-draft AI Deep Research prompt, formatted as a string.
+  context:
+    - contextualize_and_deconstruct_research_question
+  agent: prompt_guideline_integrator
+
+review_and_optimize_prompt:
+  description: >
+    Review the initial prompt from the Prompt Guideline Integrator for clarity, 
+    conciseness, coherence, and optimal wording. 
+    Identify any potential ambiguities, redundancies, or areas where the prompt could be 
+    more direct or impactful. Suggest improvements based on general prompt engineering best 
+    practices (e.g., use of clear verbs, avoiding negative constraints, specifying output format). 
+    Provide specific, actionable feedback.
+  expected_output: >
+    A structured review report (e.g., bullet points) outlining identified issues and proposed improvements.
+  context:
+    - synthesize_initial_prompt
+  agent: prompt_refiner
+
+apply_refinement_suggestions:
+  description: >
+    Incorporate the refinement suggestions from the Prompt Refiner into the 
+    initial prompt to create a revised prompt. Ensure all constructive feedback is addressed.
+  expected_output: >
+    The refined AI Deep Research prompt.
+  context:
+    - review_and_optimize_prompt
+    - synthesize_initial_prompt
+  agent: prompt_refiner
+
+audit_prompt_against_guidelines:
+  description: >
+    Perform a comprehensive audit of the refined prompt against each rule and recommendation
+     in the {prompt_guidelines_document_content}. 
+     For each guideline, state whether it is met, partially met, or not met, 
+     and provide specific reasons for any non-compliance. 
+     Focus on exact adherence to the provided rules.
+  expected_output: >
+    A detailed audit report (e.g., a table or bulleted list) itemizing compliance for each guideline.
+  context:
+    - apply_refinement_suggestions
+  agent: guideline_compliance_auditor
+
+finalize_prompt_format:
+  description: >
+    Take the audited prompt and apply any final formatting requirements 
+    (e.g., specific markdown, header structure, comment conventions). 
+    Perform a final spell-check and grammar review. 
+    Remove anything about compiance or guideline checking.
+    The output should be the ready-to-use prompt for AI Deep Research.
+  expected_output: >
+    The final, ready-to-use AI Deep Research prompt.
+  context:
+    - audit_prompt_against_guidelines
+  agent: prompt_finalizer
+  output_file: output/deep_research_prompt.json
